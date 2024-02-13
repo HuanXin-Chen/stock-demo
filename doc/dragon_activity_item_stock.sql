@@ -26,7 +26,7 @@ CREATE TABLE `dragon_activity_item_stock`  (
   `pool_id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '池子ID，attack_pool-攻击池、chest_pool-宝箱池',
   `item_id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '奖励ID',
   `stock_type` tinyint(4) NOT NULL COMMENT '库存类型，1-每日、2-活动期间',
-  `stock` int(11) NOT NULL COMMENT '库存，0-代表无库存限制',
+  `stock` int(11) NOT NULL COMMENT '库存，-1-代表无库存限制',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审计字段-创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段-更新时间',
   `operator` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '审计字段-创建人',

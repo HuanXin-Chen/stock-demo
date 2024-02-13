@@ -1,4 +1,4 @@
-package io.github.hx.po;
+package io.github.hx.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
