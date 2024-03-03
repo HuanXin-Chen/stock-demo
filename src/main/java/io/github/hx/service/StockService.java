@@ -9,6 +9,7 @@ import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @description:
@@ -37,9 +38,13 @@ public class StockService {
             if(stockRecord == null) {
                 return false;
             }
-            initRedisStock(poolId, itemId, stockRecord.getStock());
-            bucket = redissonClient.getBucket(key);
-            stock = bucket.get();
+            try {
+                initRedisStock(poolId, itemId, stockRecord.getStock());
+            } catch (Exception e) { // 处理外部异常，防止影响主流程
+                System.out.println("扣减库存失败");
+                return false;
+            }
+            stock = stockRecord.getStock();
         }
 
         // 3.递增库存
@@ -70,7 +75,8 @@ public class StockService {
     private Boolean initRedisStock(String poolId, String itemId, int count) {
         String Key = poolId + ":" + itemId + ":" + "stock" ;
         RBucket<Integer> bucket = redissonClient.getBucket(Key);
-        bucket.set(count);
+        // 添加时间，避免内存泄露
+        bucket.set(count,60, TimeUnit.MINUTES);
         return true;
     }
 

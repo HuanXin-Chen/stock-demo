@@ -9,7 +9,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   redis:
     host:  localhost
-    port:  6379
+    port:  16379
     database: 0
 logging:
   level:
