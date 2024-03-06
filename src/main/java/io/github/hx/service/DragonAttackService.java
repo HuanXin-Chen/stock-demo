@@ -1,7 +1,10 @@
 package io.github.hx.service;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.github.hx.entity.GoldDamageMapping;
+import io.github.hx.entity.LotteryCount;
 import io.github.hx.mapper.DamageMapper;
+import io.github.hx.mapper.LotteryCountMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,6 +27,9 @@ public class DragonAttackService {
     @Resource
     private DamageMapper damageMapper;
 
+    @Resource
+    private LotteryCountMapper lotteryCountMapper;
+
     // 传入用户id，用户的鞭炮，用户攻击的轮次
     public void attack(String roundId,Integer damageId,String userId) throws IOException {
 
@@ -44,11 +50,24 @@ public class DragonAttackService {
             System.out.println("攻击失败,当前用户id为"+userId);
         } else if (endResult == 0) {
             System.out.println("攻击成功，当前用户id为"+userId+"，伤害为"+endDamage);
-            // TODO:更新用户抽奖次数，根据鞭炮映射进行数据库更新
+
+            // 更新用户抽奖次数
+            UpdateWrapper<LotteryCount> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("user_id", userId);
+            String incrementSql = "lottery_count = lottery_count + " + damageMapping.getDrawTimes();
+            updateWrapper.setSql(incrementSql);
+            lotteryCountMapper.update(null, updateWrapper);
+
         } else if (endResult == 1) {
-            System.out.println("击败年兽成功，当前用户id为"+userId+"，伤害为"+ endDamage);
-            //TODO：更新用户抽奖次数，根据鞭炮映射进行数据库更新
-            //TODO: 触发击败宝箱奖励
+            System.out.println("击败年兽成功，当前用户id为"+userId+"，伤害为"+ endDamage + "，获得宝箱奖励");
+
+            UpdateWrapper<LotteryCount> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("user_id", userId);
+            String incrementSql = "lottery_count = lottery_count + " + damageMapping.getDrawTimes();
+            updateWrapper.setSql(incrementSql);
+            lotteryCountMapper.update(null, updateWrapper);
+
+            //TODO:获得宝箱奖励，这里落库返回给用户一个宝箱进行开奖
         }
 
         return ;

@@ -17,7 +17,7 @@ end
 
 local newMonsterHp = monsterHp - damage
 
-if newMonsterHp < 0 then
+if newMonsterHp <= 0 then
     realDamage = newMonsterHp + damage
     newMonsterHp = 50000
     redis.call('INCR', monsterRoundKey)

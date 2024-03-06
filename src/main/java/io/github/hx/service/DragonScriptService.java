@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,8 +23,10 @@ public class DragonScriptService {
         RScript script = redissonClient.getScript();
         String luaScript = new String(Files.readAllBytes(Paths.get("doc/dragon.lua")));
 
+
+        // BUG 原因是序列化的问题
         List<Object> result = script.eval(RScript.Mode.READ_WRITE, luaScript, RScript.ReturnType.MULTI,
-                Arrays.asList(round), String.valueOf(damage));
+                Collections.singletonList(round), Integer.valueOf(damage));
 
         return result;
     }

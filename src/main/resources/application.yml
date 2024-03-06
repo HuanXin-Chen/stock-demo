@@ -7,10 +7,6 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
-  redis:
-    host:  localhost
-    port:  16379
-    database: 0
 logging:
   level:
     com:
@@ -19,3 +15,17 @@ logging:
           core:
             mapper:
               BaseMapper=DEBUG:
+
+redis:
+  sdk:
+    config:
+      host: localhost
+      port: 16379
+      pool-size: 10
+      min-idle-size: 5
+      idle-timeout: 30000
+      connect-timeout: 5000
+      retry-attempts: 3
+      retry-interval: 1000
+      ping-interval: 60000
+      keep-alive: true
